@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Latin Dance Videos, Salsa, zouk, bachata, Tango, Mambo, Gafiera, Samba, Samba No Pe, Merengue, Kizomba">
+    <meta name="description" content="Engineering, Machine Learning, javascrip, Google Maps">
     <meta name="author" content="">
 
     <title>The Aspiring Guru</title>
@@ -28,10 +28,82 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
 
 </head>
 
 <body>
+    <script>
+          var map;
+      var bounds;
+      var infowindow;
+      function initMap() {
+        bounds = new google.maps.LatLngBounds();
+        infowindow = new google.maps.InfoWindow(); /* SINGLE */
+        map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeId: 'terrain'
+        });//end new google.maps.Map
+
+        //console.log("zoom = ", map.getZoom())
+        //console.log("google.maps.version = ", google.maps.version)
+        var script = document.createElement('script');
+        script.src = 'MapDemoBeacons.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }//end function initMap
+
+      
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var coords = results.features[i].geometry.coordinates;
+          console.log("results.features[", i, "].properties.STATUS=", results.features[i].properties.STATUS)
+          var HEIGHTABOVESL_M = results.features[i].properties.HEIGHTABOVESL_M
+          var STATUS = results.features[i].properties.STATUS
+          //console.log("results.features[", i, "].properties.=", results.features[i].properties.)
+          var name = results.features[i].properties.NAME
+          if (!HEIGHTABOVESL_M){  HEIGHTABOVESL_M = " NA" } 
+          if (!STATUS){  STATUS = " NA" } 
+          var temphtml = "Name : "+name+"<br>Status : "+STATUS+"<br>Height Above Sea Level : "+HEIGHTABOVESL_M
+          //console.log("temphtml = ", temphtml)
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          bounds.extend (latLng);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: name,
+            html: temphtml
+          });//end var marker = new google.maps.Marker
+
+          //now add infowindow and listener to each marker. reuse infowindow object
+          google.maps.event.addListener(marker, "click", function () {
+              //alert(this.html);
+              infowindow.setContent(this.html);
+              infowindow.open(map, this);
+          });
+        }//end for loop
+        //points loaded, rezooming map
+        map.fitBounds (bounds);
+      }//end window.eqfeed_callback = function(results)
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8X_CgobMPvnEYDlL868hXZcUp7zanku0&callback=initMap">
+    </script>
+
+
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -94,8 +166,10 @@
     </div>
 
     <hr>
-    <a  href="MapDemoLighthouses.html">Maps demo - Lighthouses</a><br>    
-    <a  href="MapDemoBeacons.html">Maps demo - Marine Beacons</a><br>    
+    Simple Maps demo.<br>
+    Hover over markers for name of Beacon.<br>
+    Click on mark for more information.<br>
+    <div id="map"></div>
 
     <!-- Footer -->
     <footer>
