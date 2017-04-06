@@ -1,0 +1,15 @@
+User-agent: Google
+Disallow:
+Disallow: /css/
+Disallow: /img/
+Disallow: /js/
+Disallow: /less/
+Disallow: /vendor/
+Disallow: /about.html
+Disallow: /contact.html
+Disallow: /post.html
+Crawl-delay: 1000
+
+User-agent: *
+Disallow: /
+
