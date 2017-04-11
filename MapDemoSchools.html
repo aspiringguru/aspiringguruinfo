@@ -83,15 +83,15 @@
       // Loop through the results array and place a marker for each
       // set of coordinates.
       window.eqfeed_callback = function(results) {
-        console.log("results.features.length = ", results.features.length)
+        //console.log("results.features.length = ", results.features.length)
         for (var i = 0; i < results.features.length; i++) {
           var coords = results.features[i].geometry.coordinates;
-          console.log("results.features[", i, "].properties=", results.features[i].properties)
-          console.log("coords = ", coords)
+          //console.log("results.features[", i, "].properties=", results.features[i].properties)
+          //console.log("coords = ", coords)
           var name = results.features[i].properties.Name
-          console.log("name = ", name)
+          //console.log("name = ", name)
           var temphtml = results.features[i].properties.description
-          console.log("temphtml = ", temphtml)
+          //console.log("temphtml = ", temphtml)
           var latLng = new google.maps.LatLng(coords[1],coords[0]);
           bounds.extend (latLng);
           var marker = new google.maps.Marker({
